@@ -12,13 +12,6 @@ from sqlalchemy.sql.functions import func
 
 
 class Base(DeclarativeBase):
-    id: Mapped[int] = mapped_column(
-        BIGINT, primary_key=True, autoincrement=True
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        TIMESTAMP, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(
-        TIMESTAMP, onupdate=func.now(), server_default=func.now())
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
@@ -30,4 +23,6 @@ class Child(Base):
 
     child_id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True)
     thread: Mapped[str] = mapped_column(String(255))
-    additional_instructions: Mapped[str] = mapped_column(Text)
+    additional_instruction: Mapped[str] = mapped_column(Text)
+
+

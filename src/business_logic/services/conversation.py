@@ -43,7 +43,7 @@ async def start_conversation(data: StartData):
     child = await get_or_create_child(
         child_id=data.child_id,
         thread=thread_id,
-        additional_instructions=summary_and_questions
+        additional_instruction=summary_and_questions
     )
 
     # генерируем стартовое сообщение ассистента
@@ -54,12 +54,12 @@ async def start_conversation(data: StartData):
     )
 
     # создаём папку для данного child_id в media, если её нет, либо очищаем её, если есть
-    create_or_clean_directory_in_media(directory_name=child.child_id)
+    create_or_clean_directory_in_media(directory_name=str(child.child_id))
 
     # преобразуем текст в аудио
     path_to_voice = await text_to_audio(
         text=first_message,
-        child_id=child.child_id
+        child_id=str(child.child_id)
     )
 
     return path_to_voice
@@ -74,26 +74,27 @@ async def process_conversation(data: ProcessingData):
     # сохраняем голос ребенка в mp3
     path_to_voice = await save_bytes_as_mp3(
         byte_data=data.child_voice,
-        child_id=child.child_id
+        child_id=str(child.child_id)
     )
 
     # преобразуем аудио в текст
     text = await audio_to_text(
         file_path=path_to_voice
     )
+    text = data.child_voice
 
     # получаем ответ ассистента
     assistant_answer = await create_run_and_get_result(
         assistant_id=settings.child_assistant_id,
         thread_id=child.thread,
         message=text,
-        additional_instruction=child.additional_instructions,
+        additional_instruction=child.additional_instruction,
     )
 
     # текст в голос
     final_audio_path = await text_to_audio(
         text=assistant_answer,
-        child_id=child.child_id
+        child_id=str(child.child_id)
     )
 
     return final_audio_path

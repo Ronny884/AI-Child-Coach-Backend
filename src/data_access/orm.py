@@ -19,12 +19,12 @@ logger = getLogger(__name__)
 async def get_or_create_child(
         child_id: uuid.UUID,
         thread: str = None,
-        additional_instructions: str = None,
+        additional_instruction: str = None,
         session: AsyncSession = db_session
 ):
     async with session.begin():
         result = await session.execute(
-            select(Child).filter_by(id=child_id)
+            select(Child).filter_by(child_id=child_id)
         )
         existing_child = result.scalar_one_or_none()
 
@@ -34,7 +34,7 @@ async def get_or_create_child(
         new_child = Child(
             child_id=child_id,
             thread=thread,
-            additional_instructions=additional_instructions
+            additional_instruction=additional_instruction
         )
         session.add(new_child)
         await session.commit()
