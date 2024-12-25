@@ -51,7 +51,6 @@ async def create_run_and_get_result(
         role='user',
         message: str = None,
         additional_instruction: Optional[str] = None,
-        conversation_id: Optional[str] = None,  # для обращения в redis
 ) -> str:
 
     if message:

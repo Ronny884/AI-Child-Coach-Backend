@@ -2,9 +2,6 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import requests
 from bs4 import BeautifulSoup
 
-# # Вставьте URL видео с YouTube
-# video_url = 'https://www.youtube.com/watch?v=rL8u4Y6holg'
-
 
 def get_transcript(video_url):
     response = requests.get(video_url)
